@@ -18,7 +18,8 @@ async function run() {
     app.get('/',async(req,res)=>{
         const query={};
         const cursor=productsCollection.find(query);
-        const products=await cursor.limit(3).toArray();
+        const count=await productsCollection.estimatedDocumentCount();
+        const products=await cursor.skip(count-3).limit(3).toArray();
         res.send(products);
 
     })
@@ -39,7 +40,6 @@ async function run() {
     })
     app.post('/service',async(req,res)=>{
         const service=req.body;
-        console.log(service);
         const result=await productsCollection.insertOne(service);
         res.send(result)
    })

@@ -58,7 +58,7 @@ app.get('/reviews',async(req,res)=>{
       serviceID:req.query.id
 
     };
-    const cursor=reviewCollection.find(query);
+    const cursor=reviewCollection.find(query).sort({_id:-1});
         const reviews=await cursor.toArray();
         res.send(reviews);
 
@@ -72,7 +72,7 @@ app.get('/myreviews',async(req,res)=>{
     query = { email: req.query.email };
 
   }
-  const cursor=reviewCollection.find(query);
+  const cursor=reviewCollection.find(query).sort({_id:-1});
         const reviews=await cursor.toArray();
         res.send(reviews);
 
@@ -84,6 +84,15 @@ app.delete('/reviews/:id',async(req,res)=>{
   const query={_id:ObjectId(id)};
   const result=await reviewCollection.deleteOne(query);
   res.send(result)
+
+})
+app.get('/updateproduct/:id',async(req,res)=>{
+  const id=req.params.id;
+  console.log(id);
+  const query={_id:ObjectId(id)};
+  const cursor=reviewCollection.find(query);
+  const product=await cursor.toArray();
+  res.send(product);
 
 })
    

@@ -79,6 +79,22 @@ app.get('/myreviews',async(req,res)=>{
 
 
 })
+app.put('/reviews/:id',async(req,res)=>{
+  const id=req.params.id;
+  const filter={_id:ObjectId(id)}
+  const reviewUpdate=req.body;
+  const options = { upsert: true };
+    const updateDoc = {
+$set: {
+  review:reviewUpdate.review
+},
+
+};
+const result = await reviewCollection.updateOne(filter, updateDoc, options);
+
+  res.send(result);
+
+})
 app.delete('/reviews/:id',async(req,res)=>{
   const id=req.params.id;
   const query={_id:ObjectId(id)};
@@ -88,11 +104,11 @@ app.delete('/reviews/:id',async(req,res)=>{
 })
 app.get('/updateproduct/:id',async(req,res)=>{
   const id=req.params.id;
-  console.log(id);
   const query={_id:ObjectId(id)};
-  const cursor=reviewCollection.find(query);
-  const product=await cursor.toArray();
-  res.send(product);
+  // const cursor=reviewCollection.find(query);
+  // const product=await cursor.toArray();
+  const cursor=await reviewCollection.findOne(query);
+  res.send(cursor);
 
 })
    
